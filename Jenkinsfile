@@ -38,7 +38,7 @@ pipeline {
                                         docker pull amuavia/personal-portfolio:${env.BUILD_ID}
                                         docker stop personal-portfolio-container || true
                                         docker rm personal-portfolio-container || true
-                                        docker run -d --name personal-portfolio-container -p 400:80 amuavia/personal-portfolio:${env.BUILD_ID}
+                                        docker run -d --name personal-portfolio-container -p 80:80 amuavia/personal-portfolio:${env.BUILD_ID}
                                     """
                                 )]
                             )
@@ -46,7 +46,7 @@ pipeline {
                     )
 
                     // Check if deployment is successful
-                    boolean isDeploymentSuccessful = sh(script: 'curl -s -o /dev/null -w "%{http_code}" http://13.51.242.92:400', returnStdout: true).trim() == '200'
+                    boolean isDeploymentSuccessful = sh(script: 'curl -s -o /dev/null -w "%{http_code}" http://13.51.242.92:80', returnStdout: true).trim() == '200'
 
                     if (!isDeploymentSuccessful) {
                         // Rollback to the previous version
@@ -60,7 +60,7 @@ pipeline {
                                             docker pull amuavia/personal-portfolio:${previousSuccessfulTag}
                                             docker stop personal-portfolio-container || true
                                             docker rm personal-portfolio-container || true
-                                            docker run -d --name personal-portfolio-container -p 400:80 amuavia/personal-portfolio:${previousSuccessfulTag}
+                                            docker run -d --name personal-portfolio-container -p 80:80 amuavia/personal-portfolio:${previousSuccessfulTag}
                                         """
                                     )]
                                 )
